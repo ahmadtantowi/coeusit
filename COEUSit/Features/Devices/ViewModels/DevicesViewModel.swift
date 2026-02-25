@@ -13,21 +13,33 @@ class DevicesViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var error: Error?
     
+    // Search and Filter
+    @Published var searchText: String = ""
+    @Published var selectedStatus: String? = nil
+    
     private var currentPage: Int = 1
-    private let pageSize: Int = 20 // Increased default page size
+    private let pageSize: Int = 20
     private var totalItems: Int = 0
     private var canLoadMorePages: Bool = true
     
     private let deviceService = DeviceService()
+    private var fetchTask: Task<Void, Never>?
     
+    func refresh(accessToken: String) async {
+        await fetchInitialDevices(accessToken: accessToken)
+    }
+
     func fetchInitialDevices(accessToken: String) async {
-        guard !isLoading else { return }
+        fetchTask?.cancel()
         
         currentPage = 1
         devices = []
         canLoadMorePages = true
         
-        await fetchDevices(accessToken: accessToken)
+        fetchTask = Task {
+            await fetchDevices(accessToken: accessToken)
+        }
+        await fetchTask?.value
     }
     
     func fetchNextPage(accessToken: String) async {
@@ -42,7 +54,15 @@ class DevicesViewModel: ObservableObject {
         error = nil
         
         do {
-            let response = try await deviceService.fetchDevices(page: currentPage, pageSize: pageSize, accessToken: accessToken)
+            let response = try await deviceService.fetchDevices(
+                page: currentPage,
+                pageSize: pageSize,
+                searchText: searchText.isEmpty ? nil : searchText,
+                status: selectedStatus,
+                accessToken: accessToken
+            )
+            
+            if Task.isCancelled { return }
             
             if currentPage == 1 {
                 devices = response.items
@@ -51,12 +71,13 @@ class DevicesViewModel: ObservableObject {
             }
             
             totalItems = response.total
-            // Check if we have loaded all items
             canLoadMorePages = devices.count < totalItems
             
         } catch {
-            self.error = error
-            print("Error fetching devices: \(error)")
+            if !Task.isCancelled {
+                self.error = error
+                print("Error fetching devices: \(error)")
+            }
         }
         
         isLoading = false

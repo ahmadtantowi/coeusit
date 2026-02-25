@@ -8,12 +8,22 @@ import Foundation
 struct DeviceService {
     private let baseURL = APIConfig.baseURL
     
-    func fetchDevices(page: Int, pageSize: Int, accessToken: String) async throws -> DeviceResponse {
+    func fetchDevices(page: Int, pageSize: Int, searchText: String?, status: String?, accessToken: String) async throws -> DeviceResponse {
         var components = URLComponents(string: "\(baseURL)/devices")
-        components?.queryItems = [
+        var queryItems = [
             URLQueryItem(name: "page", value: "\(page)"),
             URLQueryItem(name: "size", value: "\(pageSize)")
         ]
+        
+        if let searchText = searchText, !searchText.isEmpty {
+            queryItems.append(URLQueryItem(name: "q", value: searchText))
+        }
+        
+        if let status = status, !status.isEmpty {
+            queryItems.append(URLQueryItem(name: "status", value: status))
+        }
+        
+        components?.queryItems = queryItems
         
         guard let url = components?.url else {
             throw NetworkError.invalidURL
