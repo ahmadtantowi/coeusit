@@ -1,0 +1,7 @@
+//
+//  Config.xcconfig
+//  COEUSit
+//
+
+// The base URL for the API
+API_BASE_URL = https:/$()/stg-api.nd-gateway.com

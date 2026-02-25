@@ -12,6 +12,10 @@ class AuthManager: ObservableObject {
     @AppStorage("accessToken") private var accessToken: String = ""
     @AppStorage("refreshToken") private var refreshToken: String = ""
     
+    var token: String {
+        accessToken
+    }
+    
     private let authService = AuthService()
     private var refreshCancellable: AnyCancellable?
     
