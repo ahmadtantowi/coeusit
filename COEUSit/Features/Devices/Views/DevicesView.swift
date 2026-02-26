@@ -178,7 +178,7 @@ struct DeviceRow: View {
                         .foregroundStyle((device.smileSerialNumber != nil) ? .green : .gray)
                     
                     Spacer()
-                    batteryView
+                    BatteryView(percent: device.batteryPercent)
                 }
                 
                 HStack {
@@ -206,27 +206,6 @@ struct DeviceRow: View {
     
     private func formatStatus(_ status: String) -> String {
         status.replacingOccurrences(of: "_", with: " ").capitalized
-    }
-    
-    private var batteryView: some View {
-        HStack(spacing: 4) {
-            Image(systemName: batteryIcon)
-            Text("\(device.batteryPercent)%")
-        }
-        .font(.caption)
-        .foregroundColor(batteryColor)
-    }
-    
-    private var batteryIcon: String {
-        if device.batteryPercent > 80 { return "battery.100" }
-        if device.batteryPercent > 50 { return "battery.75" }
-        if device.batteryPercent > 20 { return "battery.50" }
-        return "battery.25"
-    }
-    
-    private var batteryColor: Color {
-        if device.batteryPercent > 20 { return .secondary }
-        return .red
     }
     
     private var statusColor: Color {

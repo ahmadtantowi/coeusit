@@ -48,16 +48,7 @@ struct DeviceDetailView: View {
                                 .fontWeight(.bold)
                             
                             HStack(spacing: 20) {
-                                batteryIndicator(percent: summary.device.batteryPercent)
-                                
-                                if summary.device.charging {
-                                    HStack(spacing: 4) {
-                                        Image(systemName: "bolt.fill")
-                                        Text("Charging")
-                                    }
-                                    .font(.caption)
-                                    .foregroundColor(.orange)
-                                }
+                                BatteryView(percent: summary.device.batteryPercent, charging: summary.device.charging)
                                 
                                 HStack(spacing: 4) {
                                     Image(systemName: "globe")
@@ -266,15 +257,6 @@ struct DeviceDetailView: View {
             }
         }
         .presentationDetents([.medium])
-    }
-    
-    private func batteryIndicator(percent: Int) -> some View {
-        HStack(spacing: 4) {
-            Image(systemName: percent > 80 ? "battery.100" : (percent > 50 ? "battery.75" : (percent > 20 ? "battery.50" : "battery.25")))
-            Text("\(percent)%")
-        }
-        .font(.caption)
-        .foregroundColor(percent > 20 ? .secondary : .red)
     }
 
     private var tempUnitSymbol: String {
