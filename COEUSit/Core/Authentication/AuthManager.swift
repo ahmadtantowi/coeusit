@@ -12,6 +12,8 @@ class AuthManager: ObservableObject {
     @AppStorage("accessToken") private var accessToken: String = ""
     @AppStorage("refreshToken") private var refreshToken: String = ""
     
+    @Published var showSessionExpiredAlert: Bool = false
+    
     var token: String {
         accessToken
     }
@@ -23,6 +25,17 @@ class AuthManager: ObservableObject {
         if isLoggedIn {
             setupAutoRefresh()
         }
+        setupNotificationObservers()
+    }
+    
+    private func setupNotificationObservers() {
+        Task {
+            let notifications = NotificationCenter.default.notifications(named: .unauthorized)
+            for await _ in notifications {
+                showSessionExpiredAlert = true
+                logout()
+            }
+        }
     }
     
     func login(email: String, password: String) async throws {
@@ -32,6 +45,7 @@ class AuthManager: ObservableObject {
         self.accessToken = response.accessToken
         self.refreshToken = response.refreshToken
         self.isLoggedIn = true
+        self.showSessionExpiredAlert = false
         self.setupAutoRefresh()
     }
     

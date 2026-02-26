@@ -39,6 +39,11 @@ struct DeviceService {
             throw NetworkError.serverError(0, "Invalid response type")
         }
         
+        if httpResponse.statusCode == 401 {
+            NotificationCenter.default.post(name: .unauthorized, object: nil)
+            throw NetworkError.unauthorized
+        }
+        
         if !(200...299).contains(httpResponse.statusCode) {
             let serverMessage = String(data: data, encoding: .utf8) ?? "Unknown error"
             throw NetworkError.serverError(httpResponse.statusCode, serverMessage)
@@ -77,6 +82,11 @@ struct DeviceService {
         
         guard let httpResponse = response as? HTTPURLResponse else {
             throw NetworkError.serverError(0, "Invalid response type")
+        }
+        
+        if httpResponse.statusCode == 401 {
+            NotificationCenter.default.post(name: .unauthorized, object: nil)
+            throw NetworkError.unauthorized
         }
         
         if !(200...299).contains(httpResponse.statusCode) {

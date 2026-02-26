@@ -103,6 +103,11 @@ struct LoginView: View {
             }, message: {
                 Text(errorMessage ?? "An unknown error occurred")
             })
+            .alert("Session Expired", isPresented: $authManager.showSessionExpiredAlert, actions: {
+                Button("OK", role: .cancel) { }
+            }, message: {
+                Text("Your session has expired. Please log in again to continue.")
+            })
         }
     }
     

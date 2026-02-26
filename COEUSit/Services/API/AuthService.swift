@@ -39,7 +39,6 @@ struct AuthService {
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
         urlRequest.httpBody = try JSONEncoder().encode(request)
         
         let (data, response) = try await URLSession.shared.data(for: urlRequest)
@@ -48,12 +47,22 @@ struct AuthService {
             throw NetworkError.serverError(0, "Invalid response type")
         }
         
+        if httpResponse.statusCode == 401 {
+            NotificationCenter.default.post(name: .unauthorized, object: nil)
+            throw NetworkError.unauthorized
+        }
+        
         if !(200...299).contains(httpResponse.statusCode) {
             let serverMessage = String(data: data, encoding: .utf8) ?? "Unknown error"
             throw NetworkError.serverError(httpResponse.statusCode, serverMessage)
         }
         
-        return try JSONDecoder().decode(LoginResponse.self, from: data)
+        let decoder = JSONDecoder()
+        do {
+            return try decoder.decode(LoginResponse.self, from: data)
+        } catch {
+            throw NetworkError.decodingError(error)
+        }
     }
     
     func refresh(request: RefreshRequest, accessToken: String) async throws -> LoginResponse {
@@ -73,11 +82,21 @@ struct AuthService {
             throw NetworkError.serverError(0, "Invalid response type")
         }
         
+        if httpResponse.statusCode == 401 {
+            NotificationCenter.default.post(name: .unauthorized, object: nil)
+            throw NetworkError.unauthorized
+        }
+        
         if !(200...299).contains(httpResponse.statusCode) {
             let serverMessage = String(data: data, encoding: .utf8) ?? "Unknown error"
             throw NetworkError.serverError(httpResponse.statusCode, serverMessage)
         }
         
-        return try JSONDecoder().decode(LoginResponse.self, from: data)
+        let decoder = JSONDecoder()
+        do {
+            return try decoder.decode(LoginResponse.self, from: data)
+        } catch {
+            throw NetworkError.decodingError(error)
+        }
     }
 }
