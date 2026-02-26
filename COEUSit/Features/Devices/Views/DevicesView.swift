@@ -25,14 +25,17 @@ struct DevicesView: View {
                     ScrollView {
                         LazyVStack(spacing: 12) {
                             ForEach(viewModel.devices) { device in
-                                DeviceRow(device: device)
-                                    .onAppear {
-                                        if device.id == viewModel.devices.last?.id {
-                                            Task {
-                                                await viewModel.fetchNextPage(accessToken: authManager.token)
-                                            }
+                                NavigationLink(destination: DeviceDetailView(deviceId: device.id)) {
+                                    DeviceRow(device: device)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                .onAppear {
+                                    if device.id == viewModel.devices.last?.id {
+                                        Task {
+                                            await viewModel.fetchNextPage(accessToken: authManager.token)
                                         }
                                     }
+                                }
                             }
                             
                             if viewModel.isLoading {
