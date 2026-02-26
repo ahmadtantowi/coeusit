@@ -21,9 +21,9 @@ struct ContentView: View {
                         Label("Devices", systemImage: "sensor.fill")
                     }
                 
-                SearchView()
+                GroupsView()
                     .tabItem {
-                        Label("Search", systemImage: "magnifyingglass")
+                        Label("Groups", systemImage: "rectangle.3.group.fill")
                     }
                 
                 SettingsView()
