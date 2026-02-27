@@ -10,20 +10,34 @@ struct DevicesView: View {
     @StateObject private var viewModel = DevicesViewModel()
     @State private var searchTask: Task<Void, Never>? = nil
     
+    var groupId: String? = nil
+    var groupName: String? = nil
+    
     var body: some View {
         NavigationStack {
             Group {
                 if viewModel.devices.isEmpty && viewModel.isLoading {
                     ProgressView("Loading devices...")
                 } else if viewModel.devices.isEmpty && !viewModel.isLoading {
-                    ContentUnavailableView(
-                        viewModel.searchText.isEmpty && viewModel.selectedStatus == nil ? "No Devices" : "No Results",
-                        systemImage: viewModel.searchText.isEmpty && viewModel.selectedStatus == nil ? "sensor.fill" : "magnifyingglass",
-                        description: Text(viewModel.searchText.isEmpty && viewModel.selectedStatus == nil ? "You haven't added any sensors yet." : "No devices match your search or filter criteria.")
-                    )
+                    VStack {
+                        if let groupName = viewModel.groupName {
+                            filterIndicator(name: groupName)
+                                .padding(.horizontal)
+                        }
+                        
+                        ContentUnavailableView(
+                            viewModel.searchText.isEmpty && viewModel.selectedStatus == nil && viewModel.selectedGroupId == nil ? "No Devices" : "No Results",
+                            systemImage: viewModel.searchText.isEmpty && viewModel.selectedStatus == nil && viewModel.selectedGroupId == nil ? "sensor.fill" : "magnifyingglass",
+                            description: Text(viewModel.searchText.isEmpty && viewModel.selectedStatus == nil && viewModel.selectedGroupId == nil ? "You haven't added any sensors yet." : "No devices match your search or filter criteria.")
+                        )
+                    }
                 } else {
                     ScrollView {
                         LazyVStack(spacing: 12) {
+                            if let groupName = viewModel.groupName {
+                                filterIndicator(name: groupName)
+                            }
+                            
                             ForEach(viewModel.devices) { device in
                                 NavigationLink(destination: DeviceDetailView(deviceId: device.id)) {
                                     DeviceRow(device: device)
@@ -59,6 +73,11 @@ struct DevicesView: View {
                 }
             }
             .task {
+                if let groupId = groupId {
+                    viewModel.selectedGroupId = groupId
+                    viewModel.groupName = groupName
+                }
+                
                 if viewModel.devices.isEmpty {
                     await viewModel.fetchInitialDevices(accessToken: authManager.token)
                 }
@@ -91,6 +110,31 @@ struct DevicesView: View {
                 }
             }
         }
+    }
+    
+    private func filterIndicator(name: String) -> some View {
+        HStack {
+            Text("Group: \(name)")
+                .font(.subheadline)
+                .fontWeight(.medium)
+            
+//            Button {
+//                viewModel.selectedGroupId = nil
+//                viewModel.groupName = nil
+//                Task {
+//                    await viewModel.fetchInitialDevices(accessToken: authManager.token)
+//                }
+//            } label: {
+//                Image(systemName: "xmark.circle.fill")
+//                    .foregroundColor(.secondary)
+//            }
+            
+            Spacer()
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(Color.accentColor.opacity(0.1))
+        .cornerRadius(8)
     }
     
     private var filterMenu: some View {

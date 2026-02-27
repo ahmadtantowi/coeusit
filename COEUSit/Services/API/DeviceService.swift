@@ -8,7 +8,7 @@ import Foundation
 struct DeviceService {
     private let baseURL = APIConfig.baseURL
     
-    func fetchDevices(page: Int, pageSize: Int, searchText: String?, status: String?, accessToken: String) async throws -> DeviceResponse {
+    func fetchDevices(page: Int, pageSize: Int, searchText: String?, status: String?, groupId: String?, accessToken: String) async throws -> DeviceResponse {
         var components = URLComponents(string: "\(baseURL)/devices")
         var queryItems = [
             URLQueryItem(name: "page", value: "\(page)"),
@@ -21,6 +21,10 @@ struct DeviceService {
         
         if let status = status, !status.isEmpty {
             queryItems.append(URLQueryItem(name: "status", value: status))
+        }
+        
+        if let groupId = groupId, !groupId.isEmpty {
+            queryItems.append(URLQueryItem(name: "group_id", value: groupId))
         }
         
         components?.queryItems = queryItems

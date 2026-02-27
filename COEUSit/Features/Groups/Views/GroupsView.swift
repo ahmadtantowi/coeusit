@@ -36,7 +36,11 @@ struct GroupsView: View {
                     ScrollView {
                         LazyVStack(spacing: 12) {
                             ForEach(viewModel.filteredGroups) { group in
-                                GroupCard(group: group)
+                                NavigationLink(destination: DevicesView(groupId: group.id, groupName: group.name)
+                                    .toolbar(.hidden, for: .tabBar)) {
+                                    GroupCard(group: group)
+                                }
+                                .buttonStyle(PlainButtonStyle())
                             }
                         }
                         .padding()

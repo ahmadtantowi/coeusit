@@ -16,6 +16,8 @@ class DevicesViewModel: ObservableObject {
     // Search and Filter
     @Published var searchText: String = ""
     @Published var selectedStatus: String? = nil
+    @Published var selectedGroupId: String? = nil
+    @Published var groupName: String? = nil
     
     private var currentPage: Int = 1
     private let pageSize: Int = 20
@@ -59,6 +61,7 @@ class DevicesViewModel: ObservableObject {
                 pageSize: pageSize,
                 searchText: searchText.isEmpty ? nil : searchText,
                 status: selectedStatus,
+                groupId: selectedGroupId,
                 accessToken: accessToken
             )
             
