@@ -13,6 +13,8 @@ class AuthManager: ObservableObject {
     @AppStorage("refreshToken") private var refreshToken: String = ""
     
     @Published var showSessionExpiredAlert: Bool = false
+    @Published var userProfile: UserProfile?
+    @Published var profileError: String?
     
     var token: String {
         accessToken
@@ -24,6 +26,9 @@ class AuthManager: ObservableObject {
     init() {
         if isLoggedIn {
             setupAutoRefresh()
+            Task {
+                await fetchUserProfile()
+            }
         }
         setupNotificationObservers()
     }
@@ -46,13 +51,28 @@ class AuthManager: ObservableObject {
         self.refreshToken = response.refreshToken
         self.isLoggedIn = true
         self.showSessionExpiredAlert = false
+        
+        await fetchUserProfile()
         self.setupAutoRefresh()
+    }
+    
+    func fetchUserProfile() async {
+        guard !accessToken.isEmpty else { return }
+        profileError = nil
+        do {
+            self.userProfile = try await authService.getUserProfile(accessToken: accessToken)
+        } catch {
+            print("Failed to fetch user profile: \(error)")
+            self.profileError = error.localizedDescription
+        }
     }
     
     func logout() {
         isLoggedIn = false
         accessToken = ""
         refreshToken = ""
+        userProfile = nil
+        profileError = nil
         refreshCancellable?.cancel()
     }
     

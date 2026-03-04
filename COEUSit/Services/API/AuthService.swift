@@ -99,4 +99,37 @@ struct AuthService {
             throw NetworkError.decodingError(error)
         }
     }
+    
+    func getUserProfile(accessToken: String) async throws -> UserProfile {
+        guard let url = URL(string: "\(baseURL)/profile") else {
+            throw NetworkError.invalidURL
+        }
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "GET"
+        urlRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NetworkError.serverError(0, "Invalid response type")
+        }
+        
+        if httpResponse.statusCode == 401 {
+            NotificationCenter.default.post(name: .unauthorized, object: nil)
+            throw NetworkError.unauthorized
+        }
+        
+        if !(200...299).contains(httpResponse.statusCode) {
+            let serverMessage = String(data: data, encoding: .utf8) ?? "Unknown error"
+            throw NetworkError.serverError(httpResponse.statusCode, serverMessage)
+        }
+        
+        let decoder = JSONDecoder()
+        do {
+            return try decoder.decode(UserProfile.self, from: data)
+        } catch {
+            throw NetworkError.decodingError(error)
+        }
+    }
 }
