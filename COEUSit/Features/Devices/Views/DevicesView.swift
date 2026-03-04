@@ -59,7 +59,7 @@ struct DevicesView: View {
                         }
                         .padding()
                     }
-                    .background(Color(UIColor.systemGroupedBackground))
+                    .background(Color.systemGroupedBackground)
                     .refreshable {
                         await viewModel.fetchInitialDevices(accessToken: authManager.token)
                     }
@@ -68,7 +68,7 @@ struct DevicesView: View {
             .navigationTitle("Devices")
             .searchable(text: $viewModel.searchText, placement: .toolbar, prompt: "Search serial number or name")
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .trailingPlacement) {
                     filterMenu
                 }
             }
@@ -243,7 +243,7 @@ struct DeviceRow: View {
             }
         }
         .padding()
-        .background(Color(UIColor.secondarySystemGroupedBackground))
+        .background(Color.secondarySystemGroupedBackground)
         .cornerRadius(12)
         .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
     }

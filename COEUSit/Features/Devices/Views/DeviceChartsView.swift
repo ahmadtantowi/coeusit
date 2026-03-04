@@ -63,7 +63,7 @@ struct TemperatureChartView: View {
             }
         }
         .padding()
-        .background(Color(UIColor.secondarySystemGroupedBackground))
+        .background(Color.secondarySystemGroupedBackground)
         .cornerRadius(12)
     }
     
@@ -133,7 +133,7 @@ struct HumidityChartView: View {
             }
         }
         .padding()
-        .background(Color(UIColor.secondarySystemGroupedBackground))
+        .background(Color.secondarySystemGroupedBackground)
         .cornerRadius(12)
     }
 }

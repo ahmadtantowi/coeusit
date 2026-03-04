@@ -20,7 +20,7 @@ struct DeviceDetailView: View {
     
     var body: some View {
         ZStack {
-            Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all)
+            Color.systemGroupedBackground.edgesIgnoringSafeArea(.all)
             
             if let summary = viewModel.summary {
                 ScrollView {
@@ -59,7 +59,7 @@ struct DeviceDetailView: View {
                             }
                         }
                         .padding()
-                        .background(Color(UIColor.secondarySystemGroupedBackground))
+                        .background(Color.secondarySystemGroupedBackground)
                         .cornerRadius(12)
                         .padding(.horizontal)
                         
@@ -125,16 +125,18 @@ struct DeviceDetailView: View {
             }
         }
         .navigationTitle("Device Details")
+        #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
+        #endif
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .trailingPlacement) {
                 if viewModel.isLoading && viewModel.summary != nil {
                     ProgressView()
                         .scaleEffect(0.8)
                 }
             }
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .trailingPlacement) {
                 filterMenu
             }
         }
@@ -237,14 +239,16 @@ struct DeviceDetailView: View {
                 }
             }
             .navigationTitle("Date Filters")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .leadingPlacement) {
                     Button("Cancel") {
                         showingFilters = false
                     }
                 }
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .trailingPlacement) {
                     Button("Done") {
                         viewModel.startDate = tempStartDate
                         viewModel.endDate = tempEndDate
@@ -296,7 +300,7 @@ struct DeviceDetailView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(Color(UIColor.secondarySystemGroupedBackground))
+        .background(Color.secondarySystemGroupedBackground)
         .cornerRadius(12)
     }
     
@@ -350,7 +354,7 @@ struct DeviceDetailView: View {
             }
         }
         .padding()
-        .background(Color(UIColor.secondarySystemGroupedBackground))
+        .background(Color.secondarySystemGroupedBackground)
         .cornerRadius(12)
     }
     

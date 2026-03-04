@@ -44,8 +44,10 @@ struct LoginView: View {
                     TextField("Email", text: $email)
                         .textFieldStyle(.roundedBorder)
                         .textContentType(.emailAddress)
+                        #if os(iOS)
                         .textInputAutocapitalization(.never)
                         .keyboardType(.emailAddress)
+                        #endif
                         .focused($focusedField, equals: .email)
                         .submitLabel(.next)
                         .onSubmit { focusedField = .password }
@@ -97,7 +99,9 @@ struct LoginView: View {
                 Spacer()
             }
             .navigationTitle("Welcome")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .alert("Login Error", isPresented: $showError, actions: {
                 Button("OK", role: .cancel) { }
             }, message: {

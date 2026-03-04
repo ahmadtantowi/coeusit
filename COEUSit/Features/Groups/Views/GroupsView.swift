@@ -37,7 +37,10 @@ struct GroupsView: View {
                         LazyVStack(spacing: 12) {
                             ForEach(viewModel.filteredGroups) { group in
                                 NavigationLink(destination: DevicesView(groupId: group.id, groupName: group.name)
-                                    .toolbar(.hidden, for: .tabBar)) {
+                                    #if os(iOS)
+                                    .toolbar(.hidden, for: .tabBar)
+                                    #endif
+                                ) {
                                     GroupCard(group: group)
                                 }
                                 .buttonStyle(PlainButtonStyle())
@@ -45,7 +48,7 @@ struct GroupsView: View {
                         }
                         .padding()
                     }
-                    .background(Color(UIColor.systemGroupedBackground))
+                    .background(Color.systemGroupedBackground)
                     .refreshable {
                         await viewModel.fetchGroups(accessToken: authManager.token)
                     }
@@ -54,7 +57,7 @@ struct GroupsView: View {
             .navigationTitle("Groups")
             .searchable(text: $viewModel.searchText, prompt: "Search group name")
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .trailingPlacement) {
                     filterMenu
                 }
             }
@@ -154,7 +157,7 @@ struct GroupCard: View {
             }
         }
         .padding()
-        .background(Color(.secondarySystemGroupedBackground))
+        .background(Color.secondarySystemGroupedBackground)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
     }
