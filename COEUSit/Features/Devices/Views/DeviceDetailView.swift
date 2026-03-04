@@ -270,38 +270,19 @@ struct DeviceDetailView: View {
     private func statsSection(_ stats: SummaryStats) -> some View {
         VStack(spacing: 16) {
             HStack(spacing: 16) {
-                statCard(title: "Avg Temp", value: stats.avgTemp.map { String(format: "%.1f%@", $0, tempUnitSymbol) } ?? "--\(tempUnitSymbol)", icon: "thermometer.medium", color: .orange)
-                statCard(title: "Avg Humidity", value: stats.avgHumidity.map { String(format: "%.1f%%", $0) } ?? "--%", icon: "drop.fill", color: .blue.opacity(0.6))
+                StatCard(title: "Avg Temp", value: stats.avgTemp.map { String(format: "%.1f%@", $0, tempUnitSymbol) } ?? "--\(tempUnitSymbol)", icon: "thermometer.medium", color: .orange)
+                StatCard(title: "Avg Humidity", value: stats.avgHumidity.map { String(format: "%.1f%%", $0) } ?? "--%", icon: "drop.fill", color: .blue.opacity(0.6))
             }
             
             HStack(spacing: 16) {
-                statCard(title: "Min", value: stats.min?.temperature.map { String(format: "%.1f%", $0) } ?? "--", icon: "thermometer.medium", color: .blue)
-                statCard(title: "Max", value: stats.max?.temperature.map { String(format: "%.1f%", $0) } ?? "--", icon: "thermometer.medium", color: .red)
+                StatCard(title: "Min", value: stats.min?.temperature.map { String(format: "%.1f%", $0) } ?? "--", icon: "thermometer.medium", color: .blue)
+                StatCard(title: "Max", value: stats.max?.temperature.map { String(format: "%.1f%", $0) } ?? "--", icon: "thermometer.medium", color: .red)
                 
-                statCard(title: "Min", value: stats.min?.humidity.map { String(format: "%.1f%", $0) } ?? "--", icon: "drop.fill", color: .blue.opacity(0.2))
-                statCard(title: "Max", value: stats.max?.humidity.map{ String(format: "%.1f%", $0) } ?? "--", icon: "drop.fill", color: .blue)
+                StatCard(title: "Min", value: stats.min?.humidity.map { String(format: "%.1f%", $0) } ?? "--", icon: "drop.fill", color: .blue.opacity(0.2))
+                StatCard(title: "Max", value: stats.max?.humidity.map{ String(format: "%.1f%", $0) } ?? "--", icon: "drop.fill", color: .blue)
             }
         }
         .padding(.horizontal)
-    }
-    
-    private func statCard(title: String, value: String, icon: String, color: Color) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Image(systemName: icon)
-                    .foregroundColor(color)
-                    .font(.system(size: 14))
-                Text(title)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            Text(value)
-                .font(.headline)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(Color.secondarySystemGroupedBackground)
-        .cornerRadius(12)
     }
     
     private func recordRow(_ record: DeviceRecord) -> some View {
