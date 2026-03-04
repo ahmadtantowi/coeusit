@@ -74,11 +74,11 @@ struct SettingsView: View {
                     Label("Log Out", systemImage: "rectangle.portrait.and.arrow.right")
                 }
             }
-        }
-        .navigationTitle("Settings")
-        .task {
-            if authManager.userProfile == nil {
-                await authManager.fetchUserProfile()
+            .navigationTitle("Settings")
+            .task {
+                if authManager.userProfile == nil {
+                    await authManager.fetchUserProfile()
+                }
             }
         }
     }
