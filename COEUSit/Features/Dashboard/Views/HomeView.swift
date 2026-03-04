@@ -27,7 +27,7 @@ struct HomeView: View {
                     if viewModel.isLoading {
                         ProgressView()
                             .padding()
-                            .background(Color(.systemBackground).opacity(0.8))
+                            .background(Color.systemBackground.opacity(0.8))
                             .cornerRadius(8)
                     }
                 }

@@ -21,6 +21,14 @@ extension Color {
         return Color(NSColor.controlBackgroundColor)
         #endif
     }
+    
+    static var systemBackground: Color {
+        #if os(iOS)
+        return Color(UIColor.systemBackground)
+        #else
+        return Color(NSColor.windowBackgroundColor)
+        #endif
+    }
 }
 
 extension ToolbarItemPlacement {
