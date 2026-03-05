@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		44BB9A532F596E69001D6821 /* coeusit.icon in Resources */ = {isa = PBXBuildFile; fileRef = 44BB9A522F596E69001D6821 /* coeusit.icon */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		44CB66C52F4EA827004218BD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		44BB9A522F596E69001D6821 /* coeusit.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = coeusit.icon; sourceTree = "<group>"; };
 		44CB66B72F4EA824004218BD /* COEUSit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = COEUSit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		44CB66C42F4EA827004218BD /* COEUSitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = COEUSitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		44CB66CE2F4EA827004218BD /* COEUSitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = COEUSitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,6 +84,7 @@
 				44CB66C72F4EA827004218BD /* COEUSitTests */,
 				44CB66D12F4EA827004218BD /* COEUSitUITests */,
 				44CB66B82F4EA824004218BD /* Products */,
+				44BB9A522F596E69001D6821 /* coeusit.icon */,
 			);
 			sourceTree = "<group>";
 		};
@@ -212,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44BB9A532F596E69001D6821 /* coeusit.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,7 +393,7 @@
 		44CB66D92F4EA827004218BD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = coeusit;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = COEUSit/COEUSit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -429,7 +436,7 @@
 		44CB66DA2F4EA827004218BD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = coeusit;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = COEUSit/COEUSit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
